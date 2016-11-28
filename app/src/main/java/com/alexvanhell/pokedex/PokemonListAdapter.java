@@ -1,12 +1,14 @@
 package com.alexvanhell.pokedex;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alexvanhell.pokedex.models.Pokemon;
 import com.bumptech.glide.Glide;
@@ -27,6 +29,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         dataset = new ArrayList<>();
     }
 
+
     @Override
     public PokemonListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pokemon_item , parent, false);
@@ -34,8 +37,8 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PokemonListAdapter.ViewHolder holder, int position) {
-        Pokemon poke = dataset.get(position);
+    public void onBindViewHolder(PokemonListAdapter.ViewHolder holder, final int position) {
+        final Pokemon poke = dataset.get(position);
         holder.pokeNum.setText(String.valueOf(poke.getNumber()));
         holder.pokeName.setText(poke.getName());
 
@@ -45,6 +48,16 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.pokeImg);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailsActivity.class);
+                intent.putExtra("pokemon_number", String.valueOf(poke.getNumber()));
+                intent.putExtra("pokemon_name", poke.getName());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -57,13 +70,16 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView pokeImg;
         private TextView pokeNum;
         private TextView pokeName;
 
+        private final Context context;
+
         public ViewHolder(View itemView) {
             super(itemView);
+            context = itemView.getContext();
 
             pokeImg = (ImageView) itemView.findViewById(R.id.poke_img);
             pokeNum = (TextView) itemView.findViewById(R.id.poke_num);

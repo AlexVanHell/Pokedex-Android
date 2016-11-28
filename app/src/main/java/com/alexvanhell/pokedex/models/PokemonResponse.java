@@ -10,7 +10,6 @@ public class PokemonResponse {
 
     private ArrayList<Pokemon> results;
 
-
     public ArrayList<Pokemon> getResults() {
         return results;
     }

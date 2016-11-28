@@ -19,7 +19,7 @@ public class Pokemon {
     }
 
     public String getName() {
-        return name.toUpperCase();
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     public void setName(String name) {
